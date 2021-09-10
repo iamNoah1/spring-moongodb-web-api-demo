@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mongo-spring
+  name: mongo-spring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-spring
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: mongo-spring
+    spec:
+      containers:
+      - image: <registry>/spring-mongo
+        name: spring-mongo
+        resources: {}
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: cloud    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mongo-spring
+  name: mongo-spring
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: mongo-spring
+  type: LoadBalancer
